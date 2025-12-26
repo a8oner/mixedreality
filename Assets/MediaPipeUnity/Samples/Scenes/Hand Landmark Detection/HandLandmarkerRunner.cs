@@ -15,6 +15,9 @@ namespace Mediapipe.Unity.Sample.HandLandmarkDetection
   {
     [SerializeField] private HandLandmarkerResultAnnotationController _handLandmarkerResultAnnotationController;
 
+    // Event to allow other scripts to subscribe to landmark updates
+    public event System.Action<HandLandmarkerResult> OnLandmarksUpdated;
+
     private Experimental.TextureFramePool _textureFramePool;
 
     public readonly HandLandmarkDetectionConfig config = new HandLandmarkDetectionConfig();
@@ -154,6 +157,7 @@ namespace Mediapipe.Unity.Sample.HandLandmarkDetection
     private void OnHandLandmarkDetectionOutput(HandLandmarkerResult result, Image image, long timestamp)
     {
       _handLandmarkerResultAnnotationController.DrawLater(result);
+      OnLandmarksUpdated?.Invoke(result);
     }
   }
 }
